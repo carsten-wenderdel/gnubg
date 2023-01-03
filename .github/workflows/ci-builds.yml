@@ -1,0 +1,28 @@
+name: CI Builds
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build-without-gtk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./gnubg
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install Dependencies
+      run: |
+        # All dependencies here are already preinstalled, so this is just for demonstration purposes.
+        sudo apt-get -y install gcc libtool automake autoconf make bison flex file texinfo patch
+    - name: configure
+      run: |
+        chmod +x autogen.sh && ./autogen.sh
+        ./configure
+    - name: make
+      run: make
+    - name: make check
+      run: make check
+  
